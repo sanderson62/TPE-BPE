@@ -17,7 +17,6 @@
 012521* 012521  CR2021011900001  PEMA Add AVLA and remove PRVA FROM LIST
 111821* 111821  CR2021111700001  PEMA Add KSOA to user list
 060322* 060322  IR2022060200001  PEMA Add EMKA to user list
-101422* 101422  IR2022101200002  SJAA Add SJAA and RCMA to user list
 030314******************************************************************
 
        ENVIRONMENT DIVISION.
@@ -80,11 +79,6 @@
            05  WS-ELCNTL-RECS-IN       PIC 9(9)      VALUE ZEROS.
            05  WS-ELCNTL-RECS-FIX      PIC 9(9)      VALUE ZEROS.
            05  WS-DISPLAY-CNT          PIC Z,ZZZ,ZZ9 VALUE ZEROS.
-101422     05  super-processors        PIC X(04).
-101422         88  sp-super-user         VALUE 'KASB' 'PEMA' 'SDGA'
-101422                                         'EMER' 'AVLA' 'TMJA'
-101422                                         'KSOA' 'EMKA' 'SJAA'
-101422                                         'RCMA' 'TANA' 'DJWB'.           
 
        LINKAGE SECTION.                                                 
                                                                         
@@ -168,10 +162,12 @@
            EXIT.
 
        0500-PROCESS.
-101422     move cf-processor to super-processors.
+
            IF (CF-RECORD-TYPE = '2')
               AND (CF-SEQUENCE-NO = +0)
-101422        AND sp-super-user
+103117        AND (CF-PROCESSOR = 'KASB' OR 'DJWB' OR 'PEMA'
+012521           OR 'SDGA' OR 'EMER' OR 'TANA' OR 'AVLA'
+060322           or 'TMJA' or 'KSOA' or 'EMKA')
 080119        and (cf-proc-credit-claims-sw <> 'NN')
               PERFORM 1000-PROCESS     THRU 1000-EXIT
            END-IF
